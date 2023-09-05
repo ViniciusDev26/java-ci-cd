@@ -1,0 +1,25 @@
+version: "3"
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=trading'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=password'
+    ports:
+      - '5432'
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    environment:
+      - SERVER_PORT=8080
+      - POSTGRES_URL=jdbc:postgresql://postgres/trading
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    ports:
+      - 8080:8080
